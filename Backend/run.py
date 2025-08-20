@@ -37,7 +37,7 @@ load_dotenv()
 console = Console()
 
 # --- Initialize Tools ---
-tavily_api_key = os.environ.get("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")
+tavily_api_key = os.environ.get("TAVILY_API_KEY")
 if tavily_api_key:
     tavily_client = TavilyClient(api_key=tavily_api_key)
     print(colored("✅ Tavily client initialized", "green"))
@@ -104,41 +104,57 @@ def handle_financial_query(query: str) -> Optional[str]:
     # Check for stock price queries
     stock_keywords = ['stock price', 'stock price of', 'price of', 'share price', 'current price', 'market price']
     if any(keyword in query_lower for keyword in stock_keywords):
-        # Extract potential stock symbols
+        # Extract potential stock symbols - improved logic
         words = query.split()
-        for i, word in enumerate(words):
-            if word.lower() in ['of', 'for', 'the'] and i + 1 < len(words):
-                potential_symbol = words[i + 1].upper()
-                
-                # Handle Indian stocks (BSE/NSE)
-                if any(indian_stock in potential_symbol for indian_stock in ['RELIANCE', 'TCS', 'INFY', 'HDFC', 'ICICI', 'SBI', 'BSE', 'NSE']):
-                    result = enhanced_financial_tools.get_indian_stock_price(potential_symbol)
-                    if result["success"]:
-                        return enhanced_financial_tools.format_stock_response(result)
-                    else:
-                        return f"❌ {result['message']}\n\n**Suggestions:**\n" + "\n".join([f"• {s}" for s in result.get('suggestions', [])])
-                
-                # Handle global stocks
-                elif any(global_stock in potential_symbol for global_stock in ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'META', 'NVDA']):
-                    result = enhanced_financial_tools.get_global_stock_price(potential_symbol)
-                    if result["success"]:
-                        return enhanced_financial_tools.format_stock_response(result)
-                    else:
-                        return f"❌ {result['message']}"
-                
-                # Try generic approach
+
+        # Company name to ticker mapping
+        company_tickers = {
+            'apple': 'AAPL', 'microsoft': 'MSFT', 'google': 'GOOGL', 'alphabet': 'GOOGL',
+            'amazon': 'AMZN', 'tesla': 'TSLA', 'meta': 'META', 'facebook': 'META',
+            'nvidia': 'NVDA', 'netflix': 'NFLX', 'uber': 'UBER', 'spotify': 'SPOT',
+            'reliance': 'RELIANCE', 'tcs': 'TCS', 'infosys': 'INFY', 'hdfc': 'HDFC',
+            'icici': 'ICICI', 'sbi': 'SBI'
+        }
+
+        # First try to find company names
+        potential_symbol = None
+        for word in words:
+            word_clean = word.lower().strip('.,!?')
+            if word_clean in company_tickers:
+                potential_symbol = company_tickers[word_clean]
+                break
+
+        # If no company name found, try to extract ticker symbols
+        if not potential_symbol:
+            for i, word in enumerate(words):
+                if word.lower() in ['of', 'for'] and i + 1 < len(words):
+                    next_word = words[i + 1].upper().strip('.,!?')
+                    # Skip common words
+                    if next_word not in ['THE', 'CURRENT', 'STOCK', 'SHARE', 'PRICE', 'AND']:
+                        potential_symbol = next_word
+                        break
+
+        if potential_symbol:
+            # Handle Indian stocks (BSE/NSE)
+            if any(indian_stock in potential_symbol for indian_stock in ['RELIANCE', 'TCS', 'INFY', 'HDFC', 'ICICI', 'SBI', 'BSE', 'NSE']):
+                result = enhanced_financial_tools.get_indian_stock_price(potential_symbol)
+                if result["success"]:
+                    return enhanced_financial_tools.format_stock_response(result)
                 else:
-                    # Try Indian stock first
+                    return f"❌ {result['message']}\n\n**Suggestions:**\n" + "\n".join([f"• {s}" for s in result.get('suggestions', [])])
+
+            # Handle global stocks
+            else:
+                result = enhanced_financial_tools.get_global_stock_price(potential_symbol)
+                if result["success"]:
+                    return enhanced_financial_tools.format_stock_response(result)
+                else:
+                    # Try Indian stock as fallback
                     result = enhanced_financial_tools.get_indian_stock_price(potential_symbol)
                     if result["success"]:
                         return enhanced_financial_tools.format_stock_response(result)
-                    
-                    # Try global stock
-                    result = enhanced_financial_tools.get_global_stock_price(potential_symbol)
-                    if result["success"]:
-                        return enhanced_financial_tools.format_stock_response(result)
-                    
-                    return f"❌ Could not find stock data for '{potential_symbol}'. Please check the symbol or try a different stock."
+                    else:
+                        return f"❌ Could not find stock data for '{potential_symbol}'. Please check the symbol or try a different stock."
     
     # Check for market index queries
     if any(keyword in query_lower for keyword in ['sensex', 'nifty', 'market index', 'market indices']):
