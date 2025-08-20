@@ -12,7 +12,8 @@ export default function ExpensesScreen() {
   // Calculate expenses by category
   const expenses = mockTransactions.filter(t => t.type === 'expense');
   const expensesByCategory = expenses.reduce((acc, expense) => {
-    acc[expense.category] = (acc[expense.category] || 0) + Math.abs(expense.amount);
+    const category = expense.category || 'Other';
+    acc[category] = (acc[category] || 0) + Math.abs(expense.amount);
     return acc;
   }, {} as Record<string, number>);
 

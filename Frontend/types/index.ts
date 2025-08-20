@@ -14,12 +14,16 @@ export interface Transaction {
 }
 
 export interface Investment {
+  id: string;
   ticker: string;
   name: string;
   price: number;
   change: number;
   changePercent: number;
   type: 'stock' | 'mutual-fund';
+  currentValue: number;
+  purchaseValue: number;
+  quantity: number;
 }
 
 export interface Goal {

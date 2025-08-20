@@ -74,7 +74,7 @@ export default function LearningHubScreen() {
   };
 
   const ArticleCard = ({ article }: { article: Article }) => (
-    <Card style={[styles.articleCard, isTablet && styles.articleCardTablet]}>
+    <Card style={[styles.articleCard, isTablet ? styles.articleCardTablet : {}]}>
       <View style={styles.articleImage}>
         <View style={[styles.placeholderImage, { backgroundColor: colors.border }]}>
           <Text style={[styles.placeholderText, { color: colors.textSecondary }]}>

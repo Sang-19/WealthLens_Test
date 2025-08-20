@@ -5,6 +5,7 @@ type Theme = 'light' | 'dark';
 
 interface ThemeContextType {
   theme: Theme;
+  isDark: boolean;
   toggleTheme: () => void;
   colors: {
     primary: string;
@@ -56,9 +57,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   };
 
   const colors = theme === 'light' ? lightColors : darkColors;
+  const isDark = theme === 'dark';
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, colors }}>
+    <ThemeContext.Provider value={{ theme, isDark, toggleTheme, colors }}>
       <StatusBar style={theme === 'light' ? 'dark' : 'light'} />
       {children}
     </ThemeContext.Provider>

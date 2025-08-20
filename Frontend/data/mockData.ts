@@ -2,44 +2,64 @@ import { Investment, Transaction, Goal, Expense, BankAccount, Article } from '@/
 
 export const mockInvestments: Investment[] = [
   {
+    id: '1',
     ticker: 'AAPL',
     name: 'Apple Inc.',
     price: 175.23,
     change: 2.45,
     changePercent: 1.42,
-    type: 'stock'
+    type: 'stock',
+    currentValue: 17523,
+    purchaseValue: 15000,
+    quantity: 100
   },
   {
+    id: '2',
     ticker: 'GOOGL',
     name: 'Alphabet Inc.',
     price: 2847.56,
     change: -15.23,
     changePercent: -0.53,
-    type: 'stock'
+    type: 'stock',
+    currentValue: 28475.6,
+    purchaseValue: 30000,
+    quantity: 10
   },
   {
+    id: '3',
     ticker: 'MSFT',
     name: 'Microsoft Corporation',
     price: 331.78,
     change: 4.12,
     changePercent: 1.26,
-    type: 'stock'
+    type: 'stock',
+    currentValue: 16589,
+    purchaseValue: 15000,
+    quantity: 50
   },
   {
+    id: '4',
     ticker: 'VFIAX',
     name: 'Vanguard S&P 500 Index',
     price: 425.67,
     change: 3.21,
     changePercent: 0.76,
-    type: 'mutual-fund'
+    type: 'mutual-fund',
+    currentValue: 21283.5,
+    purchaseValue: 20000,
+    quantity: 50
   },
   {
+    id: '5',
     ticker: 'FXNAX',
     name: 'Fidelity Total Bond',
     price: 10.45,
     change: -0.05,
     changePercent: -0.48,
-    type: 'mutual-fund'
+    type: 'mutual-fund',
+    currentValue: 10450,
+    purchaseValue: 11000,
+    quantity: 1000
   }
 ];
 

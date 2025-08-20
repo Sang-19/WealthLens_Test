@@ -67,7 +67,7 @@ export default function DashboardScreen() {
       stroke: colors.border,
       strokeWidth: 1,
     },
-    formatYLabel: (value) => `₹${(parseInt(value) / 100000).toFixed(0)}L`,
+    formatYLabel: (value: any) => `₹${(parseInt(value) / 100000).toFixed(0)}L`,
   };
 
   return (
@@ -145,6 +145,7 @@ export default function DashboardScreen() {
               fromZero={false}
               withInnerLines={true}
               yAxisSuffix=""
+              yAxisLabel=""
               yAxisInterval={1}
             />
           </View>

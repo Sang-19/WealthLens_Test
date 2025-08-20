@@ -90,7 +90,7 @@ class ChatbotApiService {
         throw new Error('Failed to connect to the server. Please check if the backend is running and accessible.');
       }
       
-      if (error.name === 'AbortError') {
+      if ((error as Error).name === 'AbortError') {
         throw new Error('Request timed out. Please try again or check your connection.');
       }
       

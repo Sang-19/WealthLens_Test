@@ -177,7 +177,6 @@ const styles = StyleSheet.create({
   },
   mainContent: {
     flex: 1,
-    transition: 'margin-left 0.3s ease',
   },
   menuButton: {
     padding: 8,

@@ -9,7 +9,7 @@ import { ChevronDown, TrendingUp, ArrowUpDown, RefreshCw, DollarSign } from 'luc
 const screenWidth = Dimensions.get('window').width;
 
 // Mock exchange rates
-const exchangeRates = {
+const exchangeRates: Record<string, Record<string, number>> = {
   'USD': { 'INR': 83.54, 'EUR': 0.85, 'GBP': 0.73, 'JPY': 110.0 },
   'INR': { 'USD': 0.012, 'EUR': 0.010, 'GBP': 0.0087, 'JPY': 1.32 },
   'EUR': { 'USD': 1.18, 'INR': 98.45, 'GBP': 0.86, 'JPY': 129.5 },

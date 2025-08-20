@@ -87,7 +87,7 @@ export default function DashboardScreen() {
             return (
               <Card key={index} style={[
                 styles.statCard,
-                isTablet && { flex: 1, minWidth: 250, maxWidth: '48%' }
+                isTablet ? { flex: 1, minWidth: 250, maxWidth: '48%' } : {}
               ]}>
                 <View style={styles.statHeader}>
                   <View style={[styles.statIcon, { backgroundColor: stat.color + '20' }]}>
